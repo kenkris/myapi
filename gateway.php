@@ -1,25 +1,49 @@
 <?php
 
+//  Check for Url
+if(empty($_SERVER['REQUEST_URI'])){
+	exit();
+}
+
+error_log($_SERVER['REQUEST_URI']);
+
+//  API version to load
+$sApiVersion = getApiVersion($_SERVER['REQUEST_URI']);
+if(empty($sApiVersion)){
+	exit();
+}
+
+switch($sApiVersion){
+	case 'v1' :
+		//  Set includ paths
+		set_include_path('v1/application/helpers:v1/application/models:v1/config');
+
+		//  Run app
+		require_once('AppV1.php');
+		$appV1 = new AppV1();
+		$appV1->start();
+
+		break;
+	default :
+		exit();
+}
+
+
+
+
 /**
- * Bootstrapping
+ * Get API version from requested URL
+ * @param  string $sUrl
+ * @return string .
  */
-
-//  Set includ paths
-set_include_path('application/helpers:application/models:config');
-
-//  Get routes map
-require_once('routes.php');
-
-/**
- * Handle API request
- */
-require_once('Router.php');
-$oRouter = new Router($aRoutes);
-
-$sUrl     = $_SERVER['REQUEST_URI'];
-$sMethod  = $_SERVER['REQUEST_METHOD'];
-$oPayload = !empty(file_get_contents('php://input')) ? json_decode(file_get_contents('php://input')) : null;
-
-$oRouter->routeRequest($sUrl, $sMethod, $oPayload);
+function getApiVersion($sUrl): string{
+	$aUrl = explode('/', $sUrl);
+	error_log(print_r($aUrl, true));
+	if(!empty($aUrl[1])){
+		return strtolower($aUrl[1]);
+	} else{
+		return false;
+	}
+}
 
 ?>
