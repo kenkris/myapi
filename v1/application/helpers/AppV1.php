@@ -12,7 +12,7 @@ class AppV1{
 		require_once('Router.php');
 		$oRouter = new Router();
 
-		$sUrl     = $_SERVER['REQUEST_URI'];
+		$sUrl     = substr($_SERVER['REQUEST_URI'], 3);  //  Remove v1 from URL
 		$sMethod  = $_SERVER['REQUEST_METHOD'];
 		$oPayload = !empty(file_get_contents('php://input')) ? json_decode(file_get_contents('php://input')) : null;
 
