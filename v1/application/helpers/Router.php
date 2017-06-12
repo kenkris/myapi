@@ -21,7 +21,7 @@ class Router{
 		foreach($this->aRoutes as $oRoute){
 			error_log(print_r($oRoute, true));
 
-			$aSplittedRouted = explode('/', $oRoute->sUrl);
+			$aSplittedRouted = explode('/', $oRoute->getUrl());
 
 
 		}
