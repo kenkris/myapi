@@ -5,8 +5,6 @@ if(empty($_SERVER['REQUEST_URI'])){
 	exit();
 }
 
-error_log($_SERVER['REQUEST_URI']);
-
 //  API version to load
 $sApiVersion = getApiVersion($_SERVER['REQUEST_URI']);
 if(empty($sApiVersion)){
@@ -38,7 +36,6 @@ switch($sApiVersion){
  */
 function getApiVersion($sUrl): string{
 	$aUrl = explode('/', $sUrl);
-	error_log(print_r($aUrl, true));
 	if(!empty($aUrl[1])){
 		return strtolower($aUrl[1]);
 	} else{
