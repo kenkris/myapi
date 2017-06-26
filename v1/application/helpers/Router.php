@@ -4,7 +4,7 @@ class Router{
 
 	private $aRoutes = array();
 
-	function __construct(){
+	public function __construct(){
 		//  Get routes
 		require_once('routes.php');
 		$this->aRoutes = $aRoutes;
