@@ -14,30 +14,31 @@ class Person{
 	 * Constructors
 	 */
 
-	/**
-	 * If id is supplied try fetching it from db
-	 * @param integer $iId
-	 * @return   [<description>]
-	 */
-	public function __construct(int $iId){
-		//  DO getPerson(id)
-		//
-		//  throw exception on no result.
-	}
+	// /**
+	//  * If id is supplied try fetching it from db
+	//  * @param integer $iId
+	//  * @return   [<description>]
+	//  */
+	// public function __construct(int $iId){
+	// 	//  DO getPerson(id)
+	// 	//
+	// 	//  throw exception on no result.
+	// }
 
-	/**
-	 *
-	 * @param string $sFirstName
-	 * @param string $sLastName
-	 * @param string $sEmail
-	 */
-	public function __construct(string $sFirstName, string $sLastName, string $sEmail){
-		//  Crete person in db and set class attr afterwards
-	}
+	// *
+	//  *
+	//  * @param string $sFirstName
+	//  * @param string $sLastName
+	//  * @param string $sEmail
+
+	// public function __construct(string $sFirstName, string $sLastName, string $sEmail){
+	// 	//  Crete person in db and set class attr afterwards
+	// }
 
 	/**
 	 * Getters and setters
 	 */
+
 	public function getId() : int { return $this->iId; }
 	public function setId(int $iId){ $this->iId = $sId; }
 
@@ -59,6 +60,16 @@ class Person{
 	public function getCellPhoneNo() : string { return $this->sCellPhoneNo; }
 	public function setCellPhoneNo(string $sCellPhoneNo){ $this->sCellPhoneNo = $sCellPhoneNo; }
 
+
+	/**
+	 * CRUD
+	 */
+
+	public function getPersons($iId = 0) : array {
+		error_log("getPersons(" . $iId . ")");
+		return array();
+	}
+
 	/**
 	 * [createPerson description]
 	 * @param  string $sFirstName
@@ -67,11 +78,15 @@ class Person{
 	 * @param  string $sDOB
 	 * @param  string $sPhoneNo
 	 * @param  string $sCellPhoneNo
-	 * @return integer
+	 * @return integer $iNewCustomerId
 	 */
-	public function createPerson(string $sFirstName, string $sLastName, string $sEmail, string $sDOB = '', string $sPhoneNo = '', string $sCellPhoneNo = '') : int {
+	public function postPerson(string $sFirstName, string $sLastName, string $sEmail, string $sDOB = '', string $sPhoneNo = '', string $sCellPhoneNo = '') : int {
 
 	}
+
+	public function putPerson() : bool {}
+
+	public function deletePerson() : bool {}
 
 }
 
