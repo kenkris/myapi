@@ -17,13 +17,13 @@ $aRoutes = array();
 $oRoute = new Route();
 $oRoute->setName('TestRoute');
 $oRoute->setUrl('/person');
-$oRoute->setAction('Person', 'person');
+$oRoute->setAction('Person', 'persons');
 $aRoutes[$oRoute->getUrl()] = $oRoute;
 
 $oRoute = new Route();
 $oRoute->setName('TestRoute');
 $oRoute->setUrl('/person/{someVal:\d+}');
-$oRoute->setAction('Person', 'person');
+$oRoute->setAction('Person', 'persons');
 $aRoutes[$oRoute->getUrl()] = $oRoute;
 
 

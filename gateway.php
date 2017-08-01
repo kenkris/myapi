@@ -14,7 +14,7 @@ if(empty($sApiVersion)){
 switch($sApiVersion){
 	case 'v1' :
 		//  Set includ paths
-		set_include_path('v1/application/helpers:v1/application/helpers/classes:v1/application/models:v1/config:global_config/db:global_classes');
+		set_include_path('v1/application/helpers:v1/application/helpers/classes:v1/application/model:v1/config:global_config/db:global_classes');
 
 		//  Run app
 		require_once('AppV1.php');

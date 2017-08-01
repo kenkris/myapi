@@ -18,25 +18,29 @@ class Router{
 	 * in routes array.
 	 * @author  Kenneth
 	 * @param  string $sUrl
-	 * @param  string $sMethod
+	 * @param  string $sHttpMethod
 	 * @param  object $oPayload
 	 */
-	public function routeRequest(string $sUrl, string $sMethod, object $oPayload = null){
+	public function routeRequest(string $sUrl, string $sHttpMethod, object $oPayload = null){
 
-		error_log('REUESTED URL: ' . $sUrl);
-		error_log('METHOD: ' . $sMethod);
-		error_log('PAYLOAD: ' . print_r($oPayload, true));
+		//  Incoming Url to match, reindexed to 0 for my own sanity
+		$aUrl = array_values(array_filter(explode('/', $sUrl)));
 
-		$aUrl = array_filter(explode('/', $sUrl));
+		$bValidRoute = false;
 
 		//  Build regex and match against route
 		foreach($this->aRoutes as $oRoute){
 
+			//  Paramters at this index in $aUrl. Used to extract params from any url. Params are prefix and postfixed with {param}
+			$aParamsAt = array();
+
+			//  Start of regex
 			$sRegex = '/^';
 
-			$aRouteUrl = array_filter(explode('/', $oRoute->getUrl()));
+			//  Make clean array, reindexed to 0 for my own sanity
+			$aRouteUrl = array_values(array_filter(explode('/', $oRoute->getUrl())));
 
-			foreach($aRouteUrl as $sVal){
+			foreach($aRouteUrl as $iKey => $sVal){
 
 				//  Add start capture group and add slash to regex
 				$sRegex .= '(\/';
@@ -45,7 +49,7 @@ class Router{
 				if(substr($sVal, 0, 1) == '{'){
 					$sVal = trim($sVal, '{}');
 					$aVal = explode(':', $sVal);
-					$sParam = $aVal[0];
+					array_push($aParamsAt, $iKey);
 					if(isset($aVal[1])){
 						$sRegex .= $aVal[1];
 					}
@@ -58,18 +62,36 @@ class Router{
 
 			}
 
+			//  End og regex
 			$sRegex .= '$/';
-
-			error_log('REGEX FOR ROUTE: ' . $sRegex);
 
 			//  Do pregmatch here
 			if(preg_match($sRegex, $sUrl)){
-				error_log("HIT :)");
+				$bValidRoute = true;
+
+				error_log("ROUTE FOUND....");
+				error_log(print_r($oRoute, true));
+				error_log(print_r($aParamsAt, true));
+
 				//  TODO : route to class and method
-				break;
-			} else{
-				//  RETURN NOTHING FOUND
+				$oActions      = $oRoute->getAction();
+				$sClass        = $oActions->class;
+				$sClassMethod  = $oActions->method;
+
+				$aParams  = array();
+				foreach($aParamsAt as $iIndex){
+					array_push($aParams, $aUrl[$iIndex]);
+				}
+
+				//  Instantiate class dynamically and call class method
+				require_once($sClass . '.php');
+				$oClass = new $sClass;
+				return call_user_func_array(array($oClass, strtolower($sHttpMethod) . $sClassMethod), $aParams);
 			}
+		}
+
+		if(!$bValidRoute){
+			return false;
 		}
 	}
 
