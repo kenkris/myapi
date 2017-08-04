@@ -7,39 +7,52 @@ class DatabaseConnection{
 	private $sUser;
 	private $sPassword;
 	private $iPort;
+	private $sTitle;
+	private $aDBConnections;
 
-	const DEFAULT_DB_PORT = 3306;
-
-	function __construct(string $sHost, string $sDatabase, string $sUser, string $sPassword){
-		$this->sHost     = $sHost;
-		$this->sDatabase = $sDatabase;
-		$this->sUser     = $sUser;
-		$this->sPassword = $sPassword;
-		$this->port      = self::DEFAULT_DB_PORT;
+	public function __construct(){
+		require_once('db_conf.php');
+		$this->aDBConnections = $aDBConnections;
 	}
 
-	public function getHost(): string{
-		return $this->sHost;
-	}
+	public function getHost(): string { return $this->sHost; }
+	public function setHost(string $sHost){ $this->sHost = $sHost; }
 
-	public function getDatabase(): string{
-		return $this->sDatabase;
-	}
+	public function getDatabase(): string { return $this->sDatabase; }
+	public function setDatabase(string $sDatabase){ $this->sDatabase = $sDatabase; }
 
-	public function getUser(): string{
-		return $this->sUser;
-	}
+	public function getUser(): string{ return $this->sUser; }
+	public function setUser(string $sUser){ $this->sUser = $sUser; }
 
-	public function getPassword(): string{
-		return $this->sPassword;
-	}
+	public function getPassword(): string{ return $this->sPassword; }
+	public function setPassword(string $sPassword){ $this->sPassword = $sPassword; }
 
-	public function getPort(): int{
-		return $this->sPassword;
-	}
+	public function getPort(): int{ return $this->iPort; }
+	public function setPort(int $iPort){ $this->iPort = $iPort; }
 
-	public function setPort(int $iPort){
-		$this->iPort = $iPort;
+	public function getTitle(): string{ return $this->sTitle; }
+	public function setTitle(string $sTitle){ $this->sTitle = $sTitle; }
+
+	/**
+	 * Return an PDO db handle for a specific database.
+	 * @param  string $sDatabase [description]
+	 * @return [type]            [description]
+	 */
+	public function getDatabaseHandle(string $sDatabase){
+
+		if(isset($this->aDBConnections[$sDatabase])){
+			$oDbConnection = $this->aDBConnections[$sDatabase];
+
+			$oDbHandle = new PDO(
+				'mysql:host=' . $oDbConnection->getHost() .
+				';port=' . $oDbConnection->getPort() .
+				';dbname=' . $oDbConnection->getDatabase(),
+				$oDbConnection->getUser(),
+				$oDbConnection->getPassword());
+			return $oDbHandle;
+		} else{
+			return null;
+		}
 	}
 
 }

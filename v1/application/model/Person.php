@@ -1,6 +1,7 @@
 <?php
+require_once('APIService.php');
 
-class Person{
+class Person extends APIService{
 
 	private $iId;
 	private $sFirstName;
@@ -66,8 +67,26 @@ class Person{
 	 */
 
 	public function getPersons($iId = 0) : array {
-		error_log("getPersons(" . $iId . ")");
-		return array();
+
+		$oDb = $this->oDatabaseConnection->getDatabaseHandle('test');
+
+		$sSql = 'SELECT * FROM Persons';
+
+		if($iId){
+			$sSql .= ' WHERE pk_person = :iId';
+		}
+
+		$oStmt = $oDb->prepare($sSql);
+
+		if($iId){
+			$oStmt->bindValue(':iId', $iId, PDO::PARAM_INT);
+		}
+
+		if(!$oStmt->execute()){
+			return array();
+		}
+
+		return $oStmt->fetchAll(PDO::FETCH_OBJ);
 	}
 
 	/**
