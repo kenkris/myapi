@@ -66,7 +66,7 @@ class Person extends APIService{
 	 * CRUD
 	 */
 
-	public function getPersons($iId = 0) : array {
+	public function getPersons($iId = 0) : Response {
 
 		$oDb = $this->oDatabaseConnection->getDatabaseHandle('test');
 
@@ -83,10 +83,34 @@ class Person extends APIService{
 		}
 
 		if(!$oStmt->execute()){
-			return array();
+			$this->oResponse->setError('getPersons query failed.');
+		} else{
+			if($oStmt->rowCount() > 0){
+				$this->oResponse->setResult($oStmt->fetchAll(PDO::FETCH_OBJ));
+			} else{
+				$this->oResponse->setError('No result');
+			}
 		}
 
-		return $oStmt->fetchAll(PDO::FETCH_OBJ);
+		// foreach($this->oResponse->getResult() as $value) {
+		// 	error_log(mb_detect_encoding($value->firstName, 'UTF-8'));
+		// 	error_log(mb_detect_encoding($value->lastName, 'UTF-8'));
+		// }
+
+
+
+		$oSomething = new stdClass();
+		$oSomething->test = array('hej1' => 1234, 'huh1' => 666);
+
+		// $oSomething = new Response();
+		// $oSomething->setError(array('hej' => 1234, 'huh' => 666));
+
+
+		error_log(json_encode($oSomething));
+		//error_log(mb_detect_encoding($test));
+
+
+		return $this->oResponse;
 	}
 
 	/**
