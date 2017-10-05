@@ -1,6 +1,7 @@
 <?php
+require_once('APIService.php');
 
-class Person{
+class Person extends APIService{
 
 	private $iId;
 	private $sFirstName;
@@ -65,9 +66,51 @@ class Person{
 	 * CRUD
 	 */
 
-	public function getPersons($iId = 0) : array {
-		error_log("getPersons(" . $iId . ")");
-		return array();
+	public function getPersons($iId = 0) : Response {
+
+		$oDb = $this->oDatabaseConnection->getDatabaseHandle('test');
+
+		$sSql = 'SELECT * FROM Persons';
+
+		if($iId){
+			$sSql .= ' WHERE pk_person = :iId';
+		}
+
+		$oStmt = $oDb->prepare($sSql);
+
+		if($iId){
+			$oStmt->bindValue(':iId', $iId, PDO::PARAM_INT);
+		}
+
+		if(!$oStmt->execute()){
+			$this->oResponse->setError('getPersons query failed.');
+		} else{
+			if($oStmt->rowCount() > 0){
+				$this->oResponse->setResult($oStmt->fetchAll(PDO::FETCH_OBJ));
+			} else{
+				$this->oResponse->setError('No result');
+			}
+		}
+
+		// foreach($this->oResponse->getResult() as $value) {
+		// 	error_log(mb_detect_encoding($value->firstName, 'UTF-8'));
+		// 	error_log(mb_detect_encoding($value->lastName, 'UTF-8'));
+		// }
+
+
+
+		$oSomething = new stdClass();
+		$oSomething->test = array('hej1' => 1234, 'huh1' => 666);
+
+		// $oSomething = new Response();
+		// $oSomething->setError(array('hej' => 1234, 'huh' => 666));
+
+
+		error_log(json_encode($oSomething));
+		//error_log(mb_detect_encoding($test));
+
+
+		return $this->oResponse;
 	}
 
 	/**

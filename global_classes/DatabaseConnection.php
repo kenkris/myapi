@@ -2,44 +2,32 @@
 
 class DatabaseConnection{
 
-	private $sHost;
-	private $sDatabase;
-	private $sUser;
-	private $sPassword;
-	private $iPort;
+	private $aDBConnections;
 
-	const DEFAULT_DB_PORT = 3306;
-
-	function __construct(string $sHost, string $sDatabase, string $sUser, string $sPassword){
-		$this->sHost     = $sHost;
-		$this->sDatabase = $sDatabase;
-		$this->sUser     = $sUser;
-		$this->sPassword = $sPassword;
-		$this->port      = self::DEFAULT_DB_PORT;
+	public function __construct(){
+		require_once('db_conf.php');
+		$this->aDBConnections = $aDBConnections;
 	}
 
-	public function getHost(): string{
-		return $this->sHost;
-	}
+	/**
+	 * Return an PDO db handle for a specific database.
+	 * @param  string $sDatabase [description]
+	 * @return [type]            [description]
+	 */
+	public function getDatabaseHandle(string $sDatabase){
 
-	public function getDatabase(): string{
-		return $this->sDatabase;
-	}
+		if(isset($this->aDBConnections[$sDatabase])){
+			$oDbConnection = $this->aDBConnections[$sDatabase];
 
-	public function getUser(): string{
-		return $this->sUser;
-	}
-
-	public function getPassword(): string{
-		return $this->sPassword;
-	}
-
-	public function getPort(): int{
-		return $this->sPassword;
-	}
-
-	public function setPort(int $iPort){
-		$this->iPort = $iPort;
+			$oDbHandle = new PDO(
+				'mysql:host=' . $oDbConnection->host . ';port=' . $oDbConnection->port . ';dbname=' . $oDbConnection->database,
+				$oDbConnection->user,
+				$oDbConnection->password,
+				array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+			return $oDbHandle;
+		} else{
+			return null;
+		}
 	}
 
 }
