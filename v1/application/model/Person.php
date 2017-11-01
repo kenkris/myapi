@@ -12,31 +12,6 @@ class Person extends APIService{
 	private $sCellPhoneNo;
 
 	/**
-	 * Constructors
-	 */
-
-	// /**
-	//  * If id is supplied try fetching it from db
-	//  * @param integer $iId
-	//  * @return   [<description>]
-	//  */
-	// public function __construct(int $iId){
-	// 	//  DO getPerson(id)
-	// 	//
-	// 	//  throw exception on no result.
-	// }
-
-	// *
-	//  *
-	//  * @param string $sFirstName
-	//  * @param string $sLastName
-	//  * @param string $sEmail
-
-	// public function __construct(string $sFirstName, string $sLastName, string $sEmail){
-	// 	//  Crete person in db and set class attr afterwards
-	// }
-
-	/**
 	 * Getters and setters
 	 */
 
@@ -91,24 +66,6 @@ class Person extends APIService{
 				$this->oResponse->setError('No result');
 			}
 		}
-
-		// foreach($this->oResponse->getResult() as $value) {
-		// 	error_log(mb_detect_encoding($value->firstName, 'UTF-8'));
-		// 	error_log(mb_detect_encoding($value->lastName, 'UTF-8'));
-		// }
-
-
-
-		$oSomething = new stdClass();
-		$oSomething->test = array('hej1' => 1234, 'huh1' => 666);
-
-		// $oSomething = new Response();
-		// $oSomething->setError(array('hej' => 1234, 'huh' => 666));
-
-
-		error_log(json_encode($oSomething));
-		//error_log(mb_detect_encoding($test));
-
 
 		return $this->oResponse;
 	}

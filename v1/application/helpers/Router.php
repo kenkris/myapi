@@ -26,8 +26,6 @@ class Router{
 		//  Incoming Url to match, reindexed to 0 for my own sanity
 		$aUrl = array_values(array_filter(explode('/', $sUrl)));
 
-		$bValidRoute = false;
-
 		//  Build regex and match against route
 		foreach($this->aRoutes as $oRoute){
 
@@ -62,18 +60,16 @@ class Router{
 
 			}
 
-			//  End og regex
+			//  End of regex
 			$sRegex .= '$/';
 
-			//  Do pregmatch here
+			//  Check for route
 			if(preg_match($sRegex, $sUrl)){
-				$bValidRoute = true;
 
 				error_log("ROUTE FOUND....");
 				error_log(print_r($oRoute, true));
 				error_log(print_r($aParamsAt, true));
 
-				//  TODO : route to class and method
 				$oActions      = $oRoute->getAction();
 				$sClass        = $oActions->class;
 				$sClassMethod  = $oActions->method;
@@ -90,9 +86,8 @@ class Router{
 			}
 		}
 
-		if(!$bValidRoute){
-			return false;
-		}
+		//  No route
+		return false;
 	}
 
 }

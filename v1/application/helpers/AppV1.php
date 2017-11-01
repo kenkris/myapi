@@ -21,22 +21,8 @@ class AppV1{
 
 		if(empty($oResult)){
 			$oResult = new Response();
-			$oResult->setError = 'Unknown error occurred';
+			$oResult->setError('Unknown error occurred');
 		}
-
-		error_log(print_r($oResult, true));
-
-		$oFormat = new Format();
-		//echo $oFormat->toJSON($oResult);
-
-		// $oTest = new stdClass();
-		// $oTest->name = 'kenneth';
-		// $oTest->test = 'dsjkjk';
-
-
-		// $oResult = new Response();
-		// $oResult->setError = 'Unknown error occurred';
-		// $oResult->setResult = array('zzzz', 'ssssss');
 
 		header('Content-Type: application/json');
 
@@ -45,6 +31,5 @@ class AppV1{
 
 
 }
-
 
 ?>
