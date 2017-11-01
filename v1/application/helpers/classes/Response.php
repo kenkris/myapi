@@ -1,6 +1,6 @@
 <?php
 
-class Response{
+class Response implements JsonSerializable{
 
 	private $sError = '';
 	private $mResult = '';
@@ -10,6 +10,17 @@ class Response{
 
 	public function getResult(){return $this->mResult; }
 	public function setResult($mResult){ $this->mResult = $mResult; }
+
+	//  Implementation of JsonSerializable
+	public function jsonSerialize(){
+        return [
+			'response' => [
+				'error' => $this->getError(),
+				'result' => $this->getResult()
+			]
+        ];
+    }
+
 
 }
 
