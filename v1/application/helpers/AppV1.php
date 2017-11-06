@@ -5,7 +5,6 @@ class AppV1{
 	public function start(){
 
 		require_once('Router.php');
-		require_once('Format.php');
 		require_once('Response.php');
 
 		/**
@@ -24,6 +23,7 @@ class AppV1{
 			$oResult->setError('Unknown error occurred');
 		}
 
+		header('Access-Control-Allow-Origin: *');
 		header('Content-Type: application/json');
 
 		echo json_encode($oResult);
