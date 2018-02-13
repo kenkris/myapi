@@ -8,7 +8,7 @@ class AppV1{
 		require_once('Response.php');
 
 		/**
-		 * Handle API request
+		 * Handle API request.
 		 */
 		$oRouter = new Router();
 
